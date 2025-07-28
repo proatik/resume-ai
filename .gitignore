@@ -1,0 +1,13 @@
+.env
+
+# --- (/frontend) --- #
+/frontend/.env
+/frontend/.next/
+/frontend/node_modules/
+/frontend/next-env.d.ts
+
+# --- (/backend) --- #
+/backend/.env
+/backend/venv/
+/backend/uploads/
+/backend/**/__pycache__/

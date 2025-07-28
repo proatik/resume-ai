@@ -1,0 +1,52 @@
+services:
+  database:
+    image: postgres:16
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - resume_ai
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: unless-stopped
+    depends_on:
+      - database
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8000:8000"
+    networks:
+      - resume_ai
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - resume_ai
+
+volumes:
+  postgres_data:
+
+networks:
+  resume_ai:
+    driver: bridge
